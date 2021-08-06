@@ -4,6 +4,7 @@ using namespace std;
 int n, m, dp[100001], temp, a[20];
 
 int main(){
+    // 首先输入商品价格。 cin >> n是用来干这件事的。
     while(cin >> n){
         for(int i = 0; i < 100001; i++)
             dp[i] = -1;

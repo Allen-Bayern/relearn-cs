@@ -3,3 +3,4 @@
 
 # Ignore the compied .exe files
 *.exe
+out/

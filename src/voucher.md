@@ -17,3 +17,153 @@
 > 找到最少张数的代金券，使其面额恰好等于商品价格。输出所使用的代金券数量；
 > 如果有多个最优解，只输出其中一种即可；
 > 如果无解，则需输出“Impossible”。
+
+分析：
+
+这是个**完全背包**问题。
+
+先穷举一把，以65元为例。
+
+* 情况1：先拿最大的50元。然后5+5+5。4张
+* 情况2：先拿30元。30+30+5，3张。
+* 情况3：先拿20元，20+20+20+5，4张；
+* 情况4：只拿5元，13张。
+
+这四种情况下，每次拿一张之后，都去找剩下的钱可以拿到最大的是哪个。那么，65元可以拆解如下：
+* 65 = 50 + 15
+* 65 = 30 + 35
+* 65 = 20 + 45
+* 65 = 5 + 60
+
+然后比哪个是最小值。写Python代码如下：
+
+代码有误，需要修改
+
+```Python
+from sys import maxsize as MAX
+
+def solution(n, amount, vouchers):
+    # n为价钱数
+    # vouchers即为代金券面值
+    # amount为种类数
+
+    # 判空是好习惯。如果是空数组，那么直接返回-1不好么
+    if not vouchers:
+        return -1
+    
+    # 对原数组进行排序，让最大的排前面
+    vouchers = sorted(vouchers, reverse = True)
+
+    # 边界条件1：如果商品价格比最小面值优惠券还要小的话，那就直接等于1张
+    if n <= vouchers:
+        return 1
+    
+    # 边界条件2：如果商品价格和面值刚好相等，那么直接一张
+    for voucher in vouchers:
+        if n == voucher:
+            return 1
+    
+    # 递推公式
+    '''
+    65的解决方式是这样的：
+    * 50 + 15
+    * 30 + 35
+    * 20 + 45
+    * 5 + 60
+
+    四个当中找最小
+    '''
+    res = MAX # 要足够大
+    for voucher in vouchers:
+        # 递归
+        tmp = 1 + solution(n - voucher, amount vouchers)
+        if tmp < res:
+            res = tmp
+    
+    return res
+```
+
+但是递归会导致大量重复计算，数据量一上来只有等着爆栈的份儿。所以，如果能用额外空间存起来已经计算的结果呢？
+
+于是，动态规划第一步：**以空间换时间**，在《算法导论》中叫做**time-memory trade-off**。实际操作中，既要时间度低又要空间复杂度低的情况几乎不存在，要么时转空要么空转时。
+
+动态第一式：
+
+```Python
+from sys import maxsize as MAX
+
+def solution(n, amount, vouchers):
+    # n为价钱数
+    # vouchers即为代金券面值
+    # amount为种类数
+
+    # 判空是好习惯。如果是空数组，那么直接返回-1
+    if not vouchers:
+        return -1
+    
+    # 对原数组进行排序，让最小的排前面
+    vouchers = sorted(vouchers)
+
+    # 申请额外空间，用于存放重复的计算结果
+    dp = [MAX for i in range(n + 1)]
+    dp[0] = -1
+    for i in range(1, n + 1):
+        if (i < vouchers[0]) or (i in vouchers):
+            # 如果商品价值比最小面值的优惠券都小
+            # 或者刚好等于一个面值
+            # 那么一张即可
+            dp[i] = 1
+        else:
+            for voucher in vouchers:
+                if (i - voucher) > 0:
+                    tmp = 1 + dp[i - voucher]
+                    if tmp < dp[i]:
+                        dp[i] = tmp
+    
+    return dp[n]
+```
+
+最终题解：
+
+因为牛客网要自己写输入输出，且不能小于5的抵5，所以最终提交版本如下：
+
+```Python
+#!/usr/bin/env python3
+# -*- coding : utf-8 -*-
+
+from sys import maxsize as MAX
+from sys import stdin, stdout
+
+def solution(price, vouchers):
+    # price: 商品价格
+    # vouchers：优惠券面值
+    if not vouchers:
+        return MAX
+    
+    vouchers = sorted(vouchers)
+    # 动态规划数组
+    dp = [MAX for i in range(price + 1)]
+    for i in range(1, price + 1):
+        if i in vouchers:
+            dp[i] = 1
+        else:
+            for voucher in vouchers:
+                if (i - voucher) > 0:
+                    tmp = 1 + dp[i - voucher]
+                    if tmp < dp[i]:
+                        dp[i] = tmp
+    
+    return dp[price]
+
+if __name__ == "__main__":
+    while 1:
+        price = int(stdin.readline().strip())
+        if not price:
+            break
+        vouchers = list(map(int, stdin.readline().strip().split()))
+        res = solution(price, vouchers[1::])
+        if res == MAX:
+            stdout.write('Impossible\n')
+        else:
+            stdout.write("%d\n"%res)
+```
