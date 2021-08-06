@@ -1,0 +1,5 @@
+.DS_Store
+*/.DS_Store
+
+# Ignore the compied .exe files
+*.exe
