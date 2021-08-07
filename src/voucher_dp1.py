@@ -21,7 +21,7 @@ def solution(n, amount, vouchers):
 
     # 代码优化
     for voucher in vouchers:
-        if voucher < len(vouchers):
+        if voucher <= len(vouchers):
             dp[voucher] = 1
 
     # for i in range(1, n + 1):
