@@ -125,45 +125,42 @@ def solution(n, amount, vouchers):
 
 最终题解：
 
-因为牛客网要自己写输入输出，且不能小于5的抵5，所以最终提交版本如下：
+因为牛客网要自己写输入输出，且不能小于5的抵5，所以最终提交版本如下(于2021.8.7优化代码)：
 
 ```Python
 #!/usr/bin/env python3
 # -*- coding : utf-8 -*-
 
-from sys import maxsize as MAX
 from sys import stdin, stdout
+from sys import maxsize as MAX
 
 def solution(price, vouchers):
-    # price: 商品价格
-    # vouchers：优惠券面值
-    if not vouchers:
-        return MAX
-    
+    # 根据题意，无需判空。故没有判空
     vouchers = sorted(vouchers)
+    
     # 动态规划数组
     dp = [MAX for i in range(price + 1)]
-    for i in range(1, price + 1):
-        if i in vouchers:
-            dp[i] = 1
-        else:
-            for voucher in vouchers:
-                if (i - voucher) > 0:
-                    tmp = 1 + dp[i - voucher]
-                    if tmp < dp[i]:
-                        dp[i] = tmp
+    for voucher in vouchers:
+        if voucher <= price:
+            dp[voucher] = 1
+    
+    for i in range(price + 1):
+        for voucher in vouchers:
+            if (i - voucher) > 0:
+                dp[i] = min(dp[i], 1 + dp[i - voucher])
     
     return dp[price]
 
-if __name__ == "__main__":
-    while 1:
-        price = int(stdin.readline().strip())
-        if not price:
+if __name__ == '__main__':
+    while price := int(stdin.readline().strip()): # 本行在Python 3.8以后可用。:=（冒等运算符）
+        if not price: # 输0就跳出
             break
         vouchers = list(map(int, stdin.readline().strip().split()))
+        
         res = solution(price, vouchers[1::])
+        
         if res == MAX:
             stdout.write('Impossible\n')
         else:
-            stdout.write("%d\n"%res)
+            stdout.write('%d\n'%res)
 ```
