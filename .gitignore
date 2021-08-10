@@ -4,3 +4,6 @@
 # Ignore the compied .exe files
 *.exe
 out/
+
+# vscode
+.vscode
