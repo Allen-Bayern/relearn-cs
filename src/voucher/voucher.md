@@ -51,11 +51,11 @@ def solution(n, amount, vouchers):
     if not vouchers:
         return -1
     
-    # 对原数组进行排序，让最大的排前面
-    vouchers = sorted(vouchers, reverse = True)
+    # 对原数组进行排序
+    vouchers = sorted(vouchers)
 
     # 边界条件1：如果商品价格比最小面值优惠券还要小的话，那就直接等于1张
-    if n <= vouchers:
+    if n <= vouchers[0]:
         return 1
     
     # 边界条件2：如果商品价格和面值刚好相等，那么直接一张
@@ -76,9 +76,10 @@ def solution(n, amount, vouchers):
     res = MAX # 要足够大
     for voucher in vouchers:
         # 递归
-        tmp = 1 + solution(n - voucher, amount vouchers)
-        if tmp < res:
-            res = tmp
+        if n >= voucher:
+            tmp = 1 + solution(n - voucher, amount vouchers)
+            if tmp < res:
+                res = tmp
     
     return res
 ```
