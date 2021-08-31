@@ -9,67 +9,63 @@ class Heap:
         :param heap: an Array
         '''
         self.heap = heap
-        self.size = len(self.heap)
     
     def parent_index(self, i):
-        if (i // 2 - 1) < 0:
-            return -MAX
-        return (i // 2 - 1)
+        if (i // 2 - 1) >= 0:
+            return (i // 2 - 1)
+        return -MAX
     
     def left_index(self, i):
-        if (2 * i + 1) >= self.size:
-            return -MAX
-        return (2 * i + 1)
+        if (2 * i + 1) < len(self.heap):
+            return (2 * i + 1)
+        return -MAX
     
     def right_index(self, i):
-        if (2 * (i + 1)) >= self.size:
-            return -MAX
-        return (2 * (i + 1))
+        if (2 * (i + 1)) < len(self.heap):
+            return (2 * (i + 1)) 
+        return -MAX
     
-    # 适配层
-    def has_property(self, method, i):
-        if method(i) == -MAX:
+    def has_property(self, prop, i):
+        '''
+        :param prop: parent_index、left_index、right_index中的任意一种
+        :param i: 第i个节点的下标
+        返回值为True或False
+        '''
+        if prop(i) == -MAX:
             return False 
-        return True    
+        return True
     
-    def max_heapify(self, i):
-        # 递归停止条件
-        if self.size == 1:
-            return 
-
+    def max_heapify(self, n, i):
         largest = i # 默认第i个为最大
 
+        # 如果有左节点
         if self.has_property(self.left_index, i):
             l = self.left_index(i)
-            if l <= self.size and self.heap[l] > self.heap[i]:
+            if l <= n and self.heap[l] > self.heap[i]:
                 largest = l
         
-        if self.has_property(self.left_index, i):
+        # 如果有右节点
+        if self.has_property(self.left_index, i): 
             r = self.right_index(i)
-            if r <= self.size and self.heap[r] > self.heap[i]:
+            if r <= n and self.heap[r] > self.heap[i]:
                 largest = r 
         
         if largest != i:
-            self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i] 
-        
-        # 上溯
-        if self.has_property(self.parent_index, i):
-            dad = self.parent_index(i)
-            self.max_heapify(dad)
-    
-    def build(self):
-        for i in range(self.size // 2, -1, -1):
-            self.max_heapify(i)
+            self.heap[i], self.heap[largest] = self.heap[largest], self.heap[i]
+            self.max_heapify(n, largest)
     
     def heapsort(self):
-        self.build()
-        for i in range(self.size - 1, 1, -1):
-            self.heap[1], self.heap[i] = self.heap[i], self.heap[1]
-            new_heap = Heap(self.heap[2::])
-            new_heap.max_heapify(1)
+        n = len(self.heap)
+        for i in range(n, -1, -1):
+            self.max_heapify(n, i)
     
+        for i in range(len(self.heap) - 1, 0, -1):
+            self.heap[0], self.heap[i] = self.heap[i], self.heap[0]
+            n -= 1
+            self.max_heapify(n, 0)
+
 if __name__ == '__main__':
-    arr = [5, 13, 2, 25, 7, 17, 20, 8, 4]
+    arr = [5, 13, 2, 25, 7, -66, 9, 12, 15]
     new_heap = Heap(arr)
     new_heap.heapsort()
     print(new_heap.heap)
