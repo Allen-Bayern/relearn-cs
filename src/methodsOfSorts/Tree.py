@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from sys import maxsize as MAX
-
 # 树节点类
 class TreeNode:
     def __init__(self, value):
