@@ -3,6 +3,7 @@
 
 def heapify(arr, i):
     largest = i
+    arrL = len(arr)
 
     left = 2 * i + 1
     right = 2 * (i + 1)
