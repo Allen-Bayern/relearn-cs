@@ -39,6 +39,7 @@ class Queue<T = unknown> {
       nextNode.prev = null;
     }
     this._queueHead = nextNode;
+    this._length--;
     return value;
   }
 
