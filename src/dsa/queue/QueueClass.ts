@@ -18,6 +18,7 @@ class Queue<T = unknown> {
       this._length = 1;
     } else {
       this._queueTail.next = newNode;
+      newNode.prev = this._queueTail;
       this._queueTail = newNode;
       this._length++;
     }
@@ -34,6 +35,9 @@ class Queue<T = unknown> {
     }
 
     const { next: nextNode, value } = this._queueHead;
+    if (nextNode) {
+      nextNode.prev = null;
+    }
     this._queueHead = nextNode;
     return value;
   }
