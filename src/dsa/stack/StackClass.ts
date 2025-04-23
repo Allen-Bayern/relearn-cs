@@ -16,6 +16,7 @@ const Stack = class<T = unknown> {
       this._length = 1;
     } else {
       this._stackTop.next = newNode;
+      newNode.prev = this._stackTop;
       this._stackTop = newNode;
       this._length++;
     }
@@ -30,6 +31,7 @@ const Stack = class<T = unknown> {
     }
 
     const { prev: prevNode, value } = this._stackTop;
+    prevNode!.next = null;
     this._stackTop = prevNode;
     this._length--;
     return value;
