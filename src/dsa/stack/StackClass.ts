@@ -31,7 +31,9 @@ const Stack = class<T = unknown> {
     }
 
     const { prev: prevNode, value } = this._stackTop;
-    prevNode!.next = null;
+    if (prevNode) {
+      prevNode.next = null;
+    }
     this._stackTop = prevNode;
     this._length--;
     return value;
