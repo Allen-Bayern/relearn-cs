@@ -1,4 +1,5 @@
-import type { SingleNode, BiNode } from "./index";
+import { BiTreeNode } from "./Nodes";
+import type { SingleNode, BiNode, BiTreeNode } from "./index";
 
 /**
  * Create an empty single node.
@@ -25,4 +26,15 @@ function createBiNode<T = unknown>(value: T): BiNode<T> {
   };
 }
 
-export { createSingleNode, createBiNode };
+/**
+ * Create an empty bi-tree node.
+ * @param value The value of the node
+ * @returns An empty bi-tree node.
+ */
+const createTreeNode = <T = unknown>(value: T): BiTreeNode<T> => ({
+  value,
+  left: null,
+  right: null,
+});
+
+export { createSingleNode, createBiNode, createTreeNode };
