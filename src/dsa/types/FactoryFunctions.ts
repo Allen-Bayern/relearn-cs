@@ -1,4 +1,3 @@
-import { BiTreeNode } from "./Nodes";
 import type { SingleNode, BiNode, BiTreeNode } from "./index";
 
 /**
