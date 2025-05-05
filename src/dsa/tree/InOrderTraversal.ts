@@ -19,9 +19,9 @@ export function recursiveInOrderTraversal<T = unknown>(
       return;
     }
 
-    dfs(root.left);
-    res.push(root.value);
-    dfs(root.right);
+    dfs(node.left);
+    res.push(node.value);
+    dfs(node.right);
   };
 
   dfs(root);

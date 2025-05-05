@@ -1,11 +1,11 @@
 /**
  * @author Yuebing
- * @description 二叉树前序遍历
+ * @description 二叉树后序遍历
  */
 import type { BiTreeNode, Maybe } from "../types";
 
 /** 递归遍历 */
-export function recursivePreOrderTraversal<T = unknown>(
+export function recursivePostOrderTraversal<T = unknown>(
   root: Maybe<BiTreeNode<T>>
 ): T[] {
   if (!root) {
@@ -19,39 +19,42 @@ export function recursivePreOrderTraversal<T = unknown>(
       return;
     }
 
-    res.push(node.value);
     dfs(node.left);
     dfs(node.right);
+    res.push(node.value);
   };
 
   dfs(root);
   return res;
 }
 
-export function stackPreOrderTraversal<T = unknown>(
+export function stackPostOrderTraversal<T = unknown>(
   root: Maybe<BiTreeNode<T>>
 ): T[] {
   if (!root) {
     return [];
   }
 
-  const stack: BiTreeNode<T>[] = [];
+  const stack: BiTreeNode<T>[] = [root];
   const res: T[] = [];
 
-  let node: Maybe<BiTreeNode<T>> = root;
+  let node: Maybe<BiTreeNode<T>> = null;
 
-  while (stack.length || node) {
-    while (node) {
+  // 实际上while循环中的顺序是“根右左”
+  while (stack.length) {
+    node = stack.pop()!;
+
+    if (node) {
       res.push(node.value);
       if (node?.left) {
         stack.push(node.left);
-        node = node.left;
+      }
+      if (node?.right) {
+        stack.push(node.right);
       }
     }
-
-    node = stack.pop()!;
-    node = node.right;
   }
 
-  return res;
+  // 所以需要反转一下
+  return res.reverse();
 }
