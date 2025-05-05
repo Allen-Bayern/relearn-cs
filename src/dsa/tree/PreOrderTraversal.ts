@@ -40,7 +40,7 @@ export function stackPreOrderTraversal<T = unknown>(
 
   let node: Maybe<BiTreeNode<T>> = root;
 
-  while (stack.length && node) {
+  while (stack.length || node) {
     while (node) {
       res.push(node.value);
       if (node?.left) {
