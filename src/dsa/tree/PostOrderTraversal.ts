@@ -35,7 +35,8 @@ export function stackPostOrderTraversal<T = unknown>(
     return [];
   }
 
-  const stack: BiTreeNode<T>[] = [root];
+  // 栈
+  const stack: Maybe<BiTreeNode<T>>[] = [root];
   const res: T[] = [];
 
   let node: Maybe<BiTreeNode<T>> = null;
@@ -46,12 +47,8 @@ export function stackPostOrderTraversal<T = unknown>(
 
     if (node) {
       res.push(node.value);
-      if (node?.left) {
-        stack.push(node.left);
-      }
-      if (node?.right) {
-        stack.push(node.right);
-      }
+      stack.push(node.left);
+      stack.push(node.right);
     }
   }
 
