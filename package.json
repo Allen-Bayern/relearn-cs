@@ -1,7 +1,7 @@
 {
   "name": "relearn-cs",
   "version": "1.0.0",
-  "description": "随手刷题记录本，不定时更新",
+  "description": "My computer science relearn notes",
   "main": "index.js",
   "scripts": {},
   "keywords": [],

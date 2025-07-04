@@ -1,3 +1,3 @@
-# relearn-cs
+# Relearn CS
 
-这里当笔记本用，重新学 CS
+A notebook of relearn computer science.
