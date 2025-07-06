@@ -1,49 +1,45 @@
 // Chain of Responsibility Pattern
 
-// 处理请求的抽象处理者
-abstract class Handler {
+abstract class Handler<T = unknown> {
   protected nextHandler: Handler | null = null;
 
-  setNext(handler: Handler): Handler {
-    this.nextHandler = handler;
-    return handler;
+  setNext(nextHandler: Handler): Handler {
+    this.nextHandler = nextHandler;
+    return nextHandler;
   }
 
-  handle(request: any): void {
+  handle(request: T) {
     if (this.nextHandler) {
       this.nextHandler.handle(request);
+    } else {
+      console.log("Cannot handle");
     }
   }
 }
 
-// 具体处理者A
-class ConcreteHandlerA extends Handler {
-  handle(request: any): void {
-    if (request === "A") {
-      console.log("ConcreteHandlerA handled the request.");
+class BuyHandler<T = string> extends Handler<T> {
+  handle(request: T): void {
+    if (request === "buy") {
+      console.log("buy");
     } else {
       super.handle(request);
     }
   }
 }
 
-// 具体处理者B
-class ConcreteHandlerB extends Handler {
-  handle(request: any): void {
-    if (request === "B") {
-      console.log("ConcreteHandlerB handled the request.");
+class SelectHandler<T = string> extends Handler<T> {
+  handle(request: T): void {
+    if (request === "select") {
+      console.log("select");
     } else {
       super.handle(request);
     }
   }
 }
 
-// 客户端代码示例
-const handlerA = new ConcreteHandlerA();
-const handlerB = new ConcreteHandlerB();
+const buyHandler = new BuyHandler<string>();
+buyHandler.setNext(new SelectHandler());
 
-handlerA.setNext(handlerB);
-
-handlerA.handle("A"); // 输出: ConcreteHandlerA handled the request.
-handlerA.handle("B"); // 输出: ConcreteHandlerB handled the request.
-handlerA.handle("C"); // 无输出
+buyHandler.handle("buy");
+buyHandler.handle("select");
+buyHandler.handle("withdraw");
