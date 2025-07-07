@@ -36,7 +36,7 @@ class EmailService {
 
 ## 2. 开放封闭原则（Open/Closed Principle, OCP）
 
-软件实体（类、模块、函数等）应该对扩展开放，对修改封闭。
+软件实体（类、模块、函数等）应该对扩展开放，对修改封闭。在实现新功能时保持已有代码不变，即尽量不改原代码。
 
 **示例：**
 
@@ -70,6 +70,8 @@ class Square implements Shape {
 ## 3. 里氏替换原则（Liskov Substitution Principle, LSP）
 
 子类对象能够替换父类对象，并且程序的功能不受影响。
+
+子类必须对父类兼容，且子类一定要返回子类而不是父类！
 
 **示例：**
 
